@@ -44,7 +44,7 @@ NSString *const ServicesTypeArr[] = {@"Dropbox",@"CloudApp",@"iCloud",@"GoogleDr
 
 - (void)prepareForLogin
 {
-    NSLog(@"%s",__FUNCTION__);
+    DLog(@"%s",__FUNCTION__);
     
     if (self.currentService == ServiceTypeDropbox)
     {
@@ -100,7 +100,7 @@ NSString *const ServicesTypeArr[] = {@"Dropbox",@"CloudApp",@"iCloud",@"GoogleDr
 
 - (void)cancelLogin
 {
-    NSLog(@"%s",__FUNCTION__);
+    DLog(@"%s",__FUNCTION__);
     
     if (delegate && [delegate respondsToSelector:@selector(servicesManagerDidCancelLogin:)])
         [delegate servicesManagerDidCancelLogin:self];
@@ -138,11 +138,11 @@ NSString *const ServicesTypeArr[] = {@"Dropbox",@"CloudApp",@"iCloud",@"GoogleDr
 
 - (void)reloadAtPath:(NSString *)path
 {
-    NSLog(@"%s",__FUNCTION__);
+    DLog(@"%s",__FUNCTION__);
     
     if (self.currentService == ServiceTypeDropbox)
     {
-        NSLog(@"path : %@",path);
+        DLog(@"path : %@",path);
         [[self dropboxClient] loadMetadata:path];
     }
     else if (self.currentService == ServiceTypeCloudApp)
@@ -176,7 +176,7 @@ NSString *const ServicesTypeArr[] = {@"Dropbox",@"CloudApp",@"iCloud",@"GoogleDr
 
 - (void)cancelDownloading
 {
-    NSLog(@"%s",__FUNCTION__);
+    DLog(@"%s",__FUNCTION__);
     
     if (self.currentService == ServiceTypeDropbox)
     {
@@ -189,7 +189,7 @@ NSString *const ServicesTypeArr[] = {@"Dropbox",@"CloudApp",@"iCloud",@"GoogleDr
         //delete file if totally downloaded
         if ([[NSFileManager defaultManager] fileExistsAtPath:localPath])
             [[NSFileManager defaultManager] removeItemAtPath:localPath error:nil];
-        else NSLog(@"Couldn't erase file at path : %@",localPath);
+        else DLog(@"Couldn't erase file at path : %@",localPath);
     }
     else if (self.currentService == ServiceTypeCloudApp)
     {
@@ -216,7 +216,7 @@ NSString *const ServicesTypeArr[] = {@"Dropbox",@"CloudApp",@"iCloud",@"GoogleDr
 
 - (void)sessionDidReceiveAuthorizationFailure:(DBSession *)session userId:(NSString *)userId
 {
-    //NSLog(@"%s",__FUNCTION__);
+    //DLog(@"%s",__FUNCTION__);
 }
 
 - (void)restClient:(DBRestClient *)client loadedMetadata:(DBMetadata *)metadata
@@ -251,12 +251,12 @@ NSString *const ServicesTypeArr[] = {@"Dropbox",@"CloudApp",@"iCloud",@"GoogleDr
 
 - (void)restClient:(DBRestClient *)client metadataUnchangedAtPath:(NSString*)path
 {
-    NSLog(@"%s",__FUNCTION__);
+    DLog(@"%s",__FUNCTION__);
 }
 
 - (void)restClient:(DBRestClient*)client loadMetadataFailedWithError:(NSError*)error
 {
-    NSLog(@"Meta Data load failed with error : %@", error);
+    DLog(@"Meta Data load failed with error : %@", error);
 }
 
 
@@ -268,7 +268,7 @@ NSString *const ServicesTypeArr[] = {@"Dropbox",@"CloudApp",@"iCloud",@"GoogleDr
 
 - (void)restClient:(DBRestClient *)client loadedFile:(NSString *)localPath
 {
-    NSLog(@"%s",__FUNCTION__);
+    DLog(@"%s",__FUNCTION__);
     
     NSString *fileName = [localPath.pathComponents lastObject];
     NSString *extension = [localPath pathExtension];
@@ -283,7 +283,7 @@ NSString *const ServicesTypeArr[] = {@"Dropbox",@"CloudApp",@"iCloud",@"GoogleDr
     //delete file if totally downloaded
     if ([[NSFileManager defaultManager] fileExistsAtPath:localPath])
         [[NSFileManager defaultManager] removeItemAtPath:localPath error:nil];
-    else NSLog(@"Couldn't erase file at path : %@",localPath);
+    else DLog(@"Couldn't erase file at path : %@",localPath);
     
     [alrtCenter closeAlertView];
     downloadingFileInfo = nil;
@@ -292,7 +292,7 @@ NSString *const ServicesTypeArr[] = {@"Dropbox",@"CloudApp",@"iCloud",@"GoogleDr
 
 - (void)restClient:(DBRestClient *)client loadFileFailedWithError:(NSError*)error
 {
-    NSLog(@"%s",__FUNCTION__);
+    DLog(@"%s",__FUNCTION__);
     
     [alrtCenter closeAlertView];
     NSString *cachePath = [downloadingFileInfo objectForKey:@"cachePath"];
@@ -304,7 +304,7 @@ NSString *const ServicesTypeArr[] = {@"Dropbox",@"CloudApp",@"iCloud",@"GoogleDr
     //delete file if totally downloaded
     if ([[NSFileManager defaultManager] fileExistsAtPath:cachePath])
         [[NSFileManager defaultManager] removeItemAtPath:cachePath error:nil];
-    else NSLog(@"Couldn't erase file at path : %@",cachePath);
+    else DLog(@"Couldn't erase file at path : %@",cachePath);
     
     downloadingFileInfo = nil;
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
@@ -326,13 +326,13 @@ NSString *const ServicesTypeArr[] = {@"Dropbox",@"CloudApp",@"iCloud",@"GoogleDr
 
 - (void)requestDidSucceedWithConnectionIdentifier:(NSString *)connectionIdentifier userInfo:(id)userInfo
 {
-    NSLog(@"%s",__FUNCTION__);
-    NSLog(@"userInfo = %@",userInfo);
+    DLog(@"%s",__FUNCTION__);
+    DLog(@"userInfo = %@",userInfo);
 }
 
 - (void)requestDidFailWithError:(NSError *)error connectionIdentifier:(NSString *)connectionIdentifier userInfo:(id)userInfo
 {
-    NSLog(@"%s",__FUNCTION__);
+    DLog(@"%s",__FUNCTION__);
     
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
     
@@ -344,17 +344,17 @@ NSString *const ServicesTypeArr[] = {@"Dropbox",@"CloudApp",@"iCloud",@"GoogleDr
 
 - (void)fileDownloadDidProgress:(CGFloat)percentageComplete
 {
-	NSLog(@"[UPLOAD PROGRESS]: %f", percentageComplete);
+	DLog(@"[UPLOAD PROGRESS]: %f", percentageComplete);
 }
 
 - (void)itemInformationRetrievalSucceeded:(CLWebItem *)item connectionIdentifier:(NSString *)connectionIdentifier userInfo:(id)userInfo
 {
-    NSLog(@"%s",__FUNCTION__);
+    DLog(@"%s",__FUNCTION__);
 }
 
 - (void)accountInformationRetrievalSucceeded:(CLAccount *)account connectionIdentifier:(NSString *)connectionIdentifier userInfo:(id)userInfo
 {
-    NSLog(@"%s",__FUNCTION__);
+    DLog(@"%s",__FUNCTION__);
 }
 
 - (void)itemListRetrievalSucceeded:(NSArray *)items connectionIdentifier:(NSString *)connectionIdentifier userInfo:(id)userInfo
@@ -367,14 +367,14 @@ NSString *const ServicesTypeArr[] = {@"Dropbox",@"CloudApp",@"iCloud",@"GoogleDr
         //NSString *extension = [fileMetaData.name pathExtension];
         
         /*
-         NSLog(@"extension = %@",extension);
+         DLog(@"extension = %@",extension);
          
-         NSLog(@"fileMetaData.name = %@",fileMetaData.name);
-         NSLog(@"fileMetaData.mimeType = %@",fileMetaData.mimeType);
-         NSLog(@"fileMetaData.type = %d",fileMetaData.type);
-         NSLog(@"fileMetaData.URL = %@",[fileMetaData.URL absoluteString]);
-         NSLog(@"fileMetaData.href = %@",[fileMetaData.href absoluteString]);
-         NSLog(@"fileMetaData.contentURL = %@",[fileMetaData.contentURL absoluteString]);
+         DLog(@"fileMetaData.name = %@",fileMetaData.name);
+         DLog(@"fileMetaData.mimeType = %@",fileMetaData.mimeType);
+         DLog(@"fileMetaData.type = %d",fileMetaData.type);
+         DLog(@"fileMetaData.URL = %@",[fileMetaData.URL absoluteString]);
+         DLog(@"fileMetaData.href = %@",[fileMetaData.href absoluteString]);
+         DLog(@"fileMetaData.contentURL = %@",[fileMetaData.contentURL absoluteString]);
          */
         
         DZDocument *document = [[DZDocument alloc] init];
@@ -399,7 +399,7 @@ NSString *const ServicesTypeArr[] = {@"Dropbox",@"CloudApp",@"iCloud",@"GoogleDr
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
-    NSLog(@"%s",__FUNCTION__);
+    DLog(@"%s",__FUNCTION__);
     dataTotalSize = response.expectedContentLength;
 }
 
@@ -415,7 +415,7 @@ NSString *const ServicesTypeArr[] = {@"Dropbox",@"CloudApp",@"iCloud",@"GoogleDr
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
-    NSLog(@"%s",__FUNCTION__);
+    DLog(@"%s",__FUNCTION__);
     NSString *fileName = [self.downloadingFileInfo objectForKey:@"filename"];
     NSString *extension = [fileName pathExtension];
     NSString *name = [fileName stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@".%@",extension] withString:@""];
@@ -433,7 +433,7 @@ NSString *const ServicesTypeArr[] = {@"Dropbox",@"CloudApp",@"iCloud",@"GoogleDr
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
 {
-    NSLog(@"%s",__FUNCTION__);
+    DLog(@"%s",__FUNCTION__);
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
 }
 
